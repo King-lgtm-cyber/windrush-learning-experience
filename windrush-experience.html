@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Windrush Story - Interactive Learning Experience</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .stage {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .stage.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .welcome-text {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .narrative-content {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+            line-height: 1.8;
+        }
+        
+        .narrative-content p {
+            margin-bottom: 15px;
+        }
+        
+        .audio-player {
+            background: #2c3e50;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .audio-player audio {
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        .question-card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .question-card h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+        
+        .question-number {
+            color: #764ba2;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 1em;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .progress-bar {
+            background: #e1e8ed;
+            height: 8px;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        
+        .summary-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .summary-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .summary-section p {
+            margin-bottom: 10px;
+            font-style: italic;
+            color: #555;
+        }
+        
+        .resources {
+            background: #2c3e50;
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .resources h3 {
+            margin-bottom: 15px;
+        }
+        
+        .resources a {
+            color: #667eea;
+            text-decoration: none;
+            display: block;
+            margin: 10px 0;
+            transition: color 0.3s ease;
+        }
+        
+        .resources a:hover {
+            color: #764ba2;
+        }
+        
+        .icon {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>The Windrush Story</h1>
+            <p>An Interactive Learning Journey</p>
+        </div>
+        
+        <div class="content">
+            <!-- Welcome Stage -->
+            <div id="welcome" class="stage active">
+                <div class="welcome-text">
+                    <p><strong>Welcome to this learning experience about the Windrush generation.</strong></p>
+                    <p>You'll engage with a powerful narrative, reflect on your own connections to this history, and create a personal artifact that captures your learning.</p>
+                    <p>Choose how you'd like to begin:</p>
+                </div>
+                <div class="button-group">
+                    <button onclick="startNarrative('read')">
+                        <span class="icon">📖</span> Read the Story
+                    </button>
+                    <button onclick="startNarrative('listen')">
+                        <span class="icon">🎧</span> Listen to the Story
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Narrative Stage -->
+            <div id="narrative" class="stage">
+                <div id="readContent" style="display: none;">
+                    <div class="narrative-content">
+                        <h2>Arrival: June 22, 1948</h2>
+                        <p>The ship horn echoed across Tilbury Docks, a sound both triumphant and uncertain. On deck stood nearly 500 passengers from the Caribbean—men, women, and children who had answered Britain's call for workers to rebuild a nation still scarred by war.</p>
+                        
+                        <p>Among them was a young Jamaican man named Oswald, clutching a single suitcase and a letter promising work. He had sold everything he owned for the passage, leaving behind sun-drenched hills and a mother who wept as she waved goodbye. Britain, he had been told, was the "Mother Country"—a place where hard work would be rewarded, where his British passport meant he belonged.</p>
+                        
+                        <p>As the ship docked, Oswald peered through the morning fog at the grey industrial landscape. It looked nothing like home. The air was cold, the sky colorless. But hope burned bright in his chest. He was here to build a better future.</p>
+                        
+                        <p>What Oswald didn't know—what none of them could have known—was that they were about to become the Windrush generation, named after the ship that brought them. They would face a nation that desperately needed their labor but wasn't ready to embrace them as equals. They would encounter "No Blacks, No Irish, No Dogs" signs on boarding house doors. They would work the hardest jobs for the lowest pay, driving buses, staffing hospitals, building roads.</p>
+                        
+                        <p>Yet they would persevere. They would establish communities, open businesses, raise families. They would enrich British culture with their music, food, and traditions. And decades later, their grandchildren would fight to protect their legacy when the very government that invited them tried to deny their right to stay.</p>
+                        
+                        <p>This is their story. A story of courage, resilience, and the ongoing struggle for belonging.</p>
+                    </div>
+                </div>
+                
+                <div id="listenContent" style="display: none;">
+                    <div class="audio-player">
+                        <p style="color: white; margin-bottom: 15px;"><strong>Listen to the Windrush Story</strong></p>
+                        <audio controls controlsList="nodownload">
+                            <source src="https://dl.dropboxusercontent.com/scl/fi/tfd81tjxw6ix8f19g1w9y/tts_Arriv_20251118_155905.mp3?rlkey=7cu42mvq7ithnp0ml8flivbnh&st=4fhxmhe3&raw=1" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                    <div class="narrative-content" style="margin-top: 20px;">
+                        <p><em>Follow along with the text below as you listen...</em></p>
+                        <h2>Arrival: June 22, 1948</h2>
+                        <p>The ship horn echoed across Tilbury Docks, a sound both triumphant and uncertain...</p>
+                        <p><em>[Full narrative text available above in Read mode]</em></p>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button onclick="startReflection()">Continue to Reflection →</button>
+                </div>
+            </div>
+            
+            <!-- Reflection Stage -->
+            <div id="reflection" class="stage">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+                </div>
+                
+                <div class="question-card">
+                    <div class="question-number" id="questionNumber">Question 1 of 5</div>
+                    <h3 id="questionText"></h3>
+                    <textarea id="answerInput" placeholder="Take your time to reflect and write your thoughts..."></textarea>
+                </div>
+                
+                <div class="button-group">
+                    <button onclick="submitAnswer()">Next Question →</button>
+                </div>
+            </div>
+            
+            <!-- Summary Stage -->
+            <div id="summary" class="stage">
+                <h2 style="color: #667eea; margin-bottom: 20px;">Your Learning Journey Complete</h2>
+                
+                <div class="summary-section">
+                    <h3>Your Reflections</h3>
+                    <div id="allAnswers"></div>
+                </div>
+                
+                <div class="summary-section">
+                    <h3>Synthesis</h3>
+                    <p id="synthesisText"></p>
+                </div>
+                
+                <div class="resources">
+                    <h3>Continue Your Learning</h3>
+                    <p>Explore more about the Windrush generation and their lasting impact:</p>
+                    <a href="https://open.spotify.com/show/1E5b2cH4z6kF8b3c0V9xKj" target="_blank">🎙️ Black History Buff Podcast</a>
+                    <a href="https://www.patreon.com/Blackhistorybuff" target="_blank">💜 Support on Patreon</a>
+                </div>
+                
+                <div class="button-group">
+                    <button onclick="startOver()">Start Over</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            "What stood out to you most in this story, and why?",
+            "Imagine stepping off that ship yourself. What emotions do you think you might have felt?",
+            "Do you see any parallels with your own family, community, or ancestry? If yes, what comes to mind? If not, that's okay too.",
+            "In your view, how did the Windrush arrival change Britain, and how did it change life for the people who arrived?",
+            "Why do you think Windrush still matters today?"
+        ];
+        
+        let currentQuestion = 0;
+        let answers = [];
+        
+        function startNarrative(mode) {
+            document.getElementById('welcome').classList.remove('active');
+            document.getElementById('narrative').classList.add('active');
+            
+            if (mode === 'read') {
+                document.getElementById('readContent').style.display = 'block';
+                document.getElementById('listenContent').style.display = 'none';
+            } else {
+                document.getElementById('listenContent').style.display = 'block';
+                document.getElementById('readContent').style.display = 'none';
+            }
+        }
+        
+        function startReflection() {
+            document.getElementById('narrative').classList.remove('active');
+            document.getElementById('reflection').classList.add('active');
+            showQuestion(0);
+        }
+        
+        function showQuestion(index) {
+            currentQuestion = index;
+            document.getElementById('questionNumber').textContent = `Question ${index + 1} of ${questions.length}`;
+            document.getElementById('questionText').textContent = questions[index];
+            document.getElementById('answerInput').value = answers[index] || '';
+            
+            const progress = ((index + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+        
+        function submitAnswer() {
+            const answer = document.getElementById('answerInput').value.trim();
+            
+            if (!answer) {
+                alert('Please share your thoughts before continuing.');
+                return;
+            }
+            
+            answers[currentQuestion] = answer;
+            
+            if (currentQuestion < questions.length - 1) {
+                showQuestion(currentQuestion + 1);
+            } else {
+                showSummary();
+            }
+        }
+        
+        function showSummary() {
+            document.getElementById('reflection').classList.remove('active');
+            document.getElementById('summary').classList.add('active');
+            
+            const answersHtml = questions.map((q, i) => `
+                <div style="margin-bottom: 20px;">
+                    <strong style="color: #667eea;">${q}</strong>
+                    <p style="margin-top: 5px;">${answers[i]}</p>
+                </div>
+            `).join('');
+            
+            document.getElementById('allAnswers').innerHTML = answersHtml;
+            
+            const synthesis = `Your reflections reveal a thoughtful engagement with the Windrush story. You've explored how this historical moment connects to questions of belonging, identity, and the ongoing impact of migration. The courage of those passengers continues to resonate today, reminding us that the struggle for dignity and acceptance is always both personal and collective.
+
+Your journey through this narrative shows how history isn't just about dates and events—it's about real people making difficult choices, facing uncertainty with hope, and building communities against the odds. Thank you for taking the time to reflect deeply on this important chapter of British history.`;
+            
+            document.getElementById('synthesisText').textContent = synthesis;
+        }
+        
+        function startOver() {
+            currentQuestion = 0;
+            answers = [];
+            document.getElementById('summary').classList.remove('active');
+            document.getElementById('welcome').classList.add('active');
+        }
+    </script>
+</body>
+</html>
